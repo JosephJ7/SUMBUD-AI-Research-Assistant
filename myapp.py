@@ -104,28 +104,28 @@ def main():
     with st.sidebar:
       domain = st.text_input('Domain',placeholder="Enter the Domain")
     
-    if domain == "":
-      st.success('Pick a Domain , And start to fly 😊', icon="✅")
-    else:
+#     if domain == "":
+#       st.success('Pick a Domain , And start to fly 😊', icon="✅")
+#     else:
       
-      with st.spinner('Wait for it...'):
-           data['Domain']=data['Domain'].apply(lambda a : tp.lowercasing(a))
-           domain_pd=data.loc[data['Domain'] == tp.lowercasing(domain)]
-           domain_pd['Summarized_Abstract'] = domain_pd['clean_abstract'].apply(bert_smallbert2bert)
+#       with st.spinner('Wait for it...'):
+#            data['Domain']=data['Domain'].apply(lambda a : tp.lowercasing(a))
+#            domain_pd=data.loc[data['Domain'] == tp.lowercasing(domain)]
+#            domain_pd['Summarized_Abstract'] = domain_pd['clean_abstract'].apply(bert_smallbert2bert)
            
-           domain_pd=domain_pd.drop(["Abstract","Summary","clean_abstract"],axis=1)
-           domain_pd=domain_pd.reset_index(drop = True)
-           table=st.table(domain_pd)
-           time.sleep(5)
+#            domain_pd=domain_pd.drop(["Abstract","Summary","clean_abstract"],axis=1)
+#            domain_pd=domain_pd.reset_index(drop = True)
+#            table=st.table(domain_pd)
+#            time.sleep(5)
 
-      with st.sidebar:
-            csv = convert_df(domain_pd)
-            st.download_button(
-            label="Download data as CSV",
-            data=csv,
-            file_name='domain_find.csv',
-            mime='text/csv',
-            )
+#       with st.sidebar:
+#             csv = convert_df(domain_pd)
+#             st.download_button(
+#             label="Download data as CSV",
+#             data=csv,
+#             file_name='domain_find.csv',
+#             mime='text/csv',
+#             )
   
   else:
     st.subheader("File uploaded")
@@ -191,8 +191,8 @@ def main():
 # sheet_url = st.secrets["public_gsheets_url"]
 # rows = run_query(f'SELECT * FROM "{sheet_url}"')
 # data = pd.read_csv("../sumbud/AIML-RawData.xlsx - Sheet1.csv", sep=",")
-data=pd.DataFrame(rows)
-data=tp.textp(data) 
+# data=pd.DataFrame(rows)
+# data=tp.textp(data) 
 
 if __name__=='__main__':
   main()
