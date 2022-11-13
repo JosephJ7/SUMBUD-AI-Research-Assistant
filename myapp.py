@@ -18,13 +18,13 @@ def convert_df(df):
     return df.to_csv().encode('utf-8')
 
 # Create a connection object.
-conn = connect()
+# conn = connect()
 
-@st.cache(ttl=600)
-def run_query(query):
-    rows = conn.execute(query, headers=1)
-    rows = rows.fetchall()
-    return rows
+# @st.cache(ttl=600)
+# def run_query(query):
+#     rows = conn.execute(query, headers=1)
+#     rows = rows.fetchall()
+#     return rows
 
 def bert_smallbert2bert(text):
   
@@ -188,8 +188,8 @@ def main():
             )
 
 
-sheet_url = st.secrets["public_gsheets_url"]
-rows = run_query(f'SELECT * FROM "{sheet_url}"')
+# sheet_url = st.secrets["public_gsheets_url"]
+# rows = run_query(f'SELECT * FROM "{sheet_url}"')
 # data = pd.read_csv("../sumbud/AIML-RawData.xlsx - Sheet1.csv", sep=",")
 data=pd.DataFrame(rows)
 data=tp.textp(data) 
