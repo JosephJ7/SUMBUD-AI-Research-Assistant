@@ -28,7 +28,7 @@ def run_query(query):
 
 @st.experimental_singleton
 def get_model(model_type):
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    
     return BartForConditionalGeneration.from_pretrained(model_type).to(device)
 
 @st.experimental_singleton
@@ -100,7 +100,7 @@ def get_model(source):
    result = compare(complete)
    return result
 
-@st.cache
+
 def main():
   st.title('SUMBUD')
  
@@ -201,7 +201,7 @@ rows = run_query(f'SELECT * FROM "{sheet_url}"')
 # data = pd.read_csv("../sumbud/AIML-RawData.xlsx - Sheet1.csv", sep=",")
 data=pd.DataFrame(rows)
 data=tp.textp(data) 
-
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
 if __name__=='__main__':
