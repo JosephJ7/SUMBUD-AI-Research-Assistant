@@ -26,16 +26,14 @@ def run_query(query):
     rows = rows.fetchall()
     return rows
 
-@st.experimental_singleton
-def get_model(model_type):
-    
-    return BartForConditionalGeneration.from_pretrained(model_type).to(device)
+
+
 
 @st.experimental_singleton
 def bert_smallbert2bert(text):
   checkpoint = "sshleifer/distilbart-cnn-12-6"
   tokenizer = BartTokenizerFast.from_pretrained(checkpoint)
-  model = get_model(checkpoint)
+  model = BartForConditionalGeneration.from_pretrained(checkpoint).to(device)
   # cut off at BERT max length 512
   inputs = tokenizer([text], padding="max_length", truncation=True, max_length=512, return_tensors="pt")
   input_ids = inputs.input_ids.to(device)
