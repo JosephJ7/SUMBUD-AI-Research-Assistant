@@ -27,11 +27,13 @@ def run_query(query):
     return rows
 
 @st.experimental_singleton
+def get_model(model_type):
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    return BartForConditionalGeneration.from_pretrained(model_type).to(device)
+
+@st.experimental_singleton
 def bert_smallbert2bert(text):
-  checkpoint = "sshleifer/distilbart-cnn-12-6"
-  device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-  tokenizer = BartTokenizerFast.from_pretrained(checkpoint)
-  model = BartForConditionalGeneration.from_pretrained(checkpoint).to(device)
+ 
   # cut off at BERT max length 512
   inputs = tokenizer([text], padding="max_length", truncation=True, max_length=512, return_tensors="pt")
   input_ids = inputs.input_ids.to(device)
@@ -96,7 +98,7 @@ def get_model(source):
    result = compare(complete)
    return result
 
-
+@st.cache
 def main():
   st.title('SUMBUD')
  
@@ -197,6 +199,10 @@ rows = run_query(f'SELECT * FROM "{sheet_url}"')
 # data = pd.read_csv("../sumbud/AIML-RawData.xlsx - Sheet1.csv", sep=",")
 data=pd.DataFrame(rows)
 data=tp.textp(data) 
+
+checkpoint = "sshleifer/distilbart-cnn-12-6"
+tokenizer = BartTokenizerFast.from_pretrained(checkpoint)
+model = get_model(checkpoint)
 
 if __name__=='__main__':
   main()
