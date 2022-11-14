@@ -33,7 +33,9 @@ def get_model(model_type):
 
 @st.experimental_singleton
 def bert_smallbert2bert(text):
- 
+  checkpoint = "sshleifer/distilbart-cnn-12-6"
+  tokenizer = BartTokenizerFast.from_pretrained(checkpoint)
+  model = get_model(checkpoint)
   # cut off at BERT max length 512
   inputs = tokenizer([text], padding="max_length", truncation=True, max_length=512, return_tensors="pt")
   input_ids = inputs.input_ids.to(device)
@@ -200,9 +202,7 @@ rows = run_query(f'SELECT * FROM "{sheet_url}"')
 data=pd.DataFrame(rows)
 data=tp.textp(data) 
 
-checkpoint = "sshleifer/distilbart-cnn-12-6"
-tokenizer = BartTokenizerFast.from_pretrained(checkpoint)
-model = get_model(checkpoint)
+
 
 if __name__=='__main__':
   main()
