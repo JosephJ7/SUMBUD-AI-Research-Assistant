@@ -17,7 +17,7 @@ def convert_df(df):
     # IMPORTANT: Cache the conversion to prevent computation on every rerun
     return df.to_csv().encode('utf-8')
 
-Create a connection object.
+#Create a connection object.
 conn = connect()
 
 @st.cache(ttl=600)
@@ -26,8 +26,12 @@ def run_query(query):
     rows = rows.fetchall()
     return rows
 
+@st.cache
 def bert_smallbert2bert(text):
-  
+  checkpoint = "sshleifer/distilbart-cnn-12-6"
+  device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+  tokenizer = BartTokenizerFast.from_pretrained(checkpoint)
+  model = BartForConditionalGeneration.from_pretrained(checkpoint).to(device)
   # cut off at BERT max length 512
   inputs = tokenizer([text], padding="max_length", truncation=True, max_length=512, return_tensors="pt")
   input_ids = inputs.input_ids.to(device)
@@ -38,12 +42,7 @@ def bert_smallbert2bert(text):
   return tokenizer.decode(output[0], skip_special_tokens=True)
 
 
-
-checkpoint = "sshleifer/distilbart-cnn-12-6"
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-tokenizer = BartTokenizerFast.from_pretrained(checkpoint)
-model = BartForConditionalGeneration.from_pretrained(checkpoint).to(device)
-
+@st.cache
 def get_info(f):
      
     pdf = PdfFileReader(f)
@@ -58,6 +57,7 @@ def get_info(f):
     year=date.strftime('%Y')
     return author,subject,title,year
 
+@st.cache
 def extract_abstract(source):
   reader = PdfReader(source)
   page = reader.pages[0]
@@ -68,6 +68,7 @@ def extract_abstract(source):
   abstract=text.split("Abstract")[1].split("Keywords")[0]
   return abstract
 
+@st.cache
 def extract_all_text(source):
    text = []
    pdfReader = PyPDF2.PdfFileReader(source)
@@ -76,6 +77,7 @@ def extract_all_text(source):
      text.append(pageObj.extractText())
    return text
 
+@st.cache
 def compare(text):
     models = ['convolutional neural networks','convolutional neural network' ,'cnn','cnns','recurrent neural networks','recurrent neural network','rnn','rnns','Deep Neural Networks','dnns','svm','consensus algothrim',"federated learning","svr"]
     used=[]
@@ -84,6 +86,7 @@ def compare(text):
             used.append(model)
     return used
 
+@st.cache
 def get_model(source):
    text=extract_all_text(source)
    complete = ''.join(text)
@@ -93,6 +96,7 @@ def get_model(source):
    result = compare(complete)
    return result
 
+@st.cache
 def main():
   st.title('SUMBUD')
  
