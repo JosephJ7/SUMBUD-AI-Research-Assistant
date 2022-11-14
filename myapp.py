@@ -96,7 +96,7 @@ def get_model(source):
    result = compare(complete)
    return result
 
-@st.cache
+
 def main():
   st.title('SUMBUD')
  
