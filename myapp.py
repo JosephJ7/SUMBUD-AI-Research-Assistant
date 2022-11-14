@@ -26,7 +26,7 @@ def run_query(query):
     rows = rows.fetchall()
     return rows
 
-@st.cache
+@st.experimental_singleton
 def bert_smallbert2bert(text):
   checkpoint = "sshleifer/distilbart-cnn-12-6"
   device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
